@@ -60,4 +60,25 @@ class TaskController extends Controller
     
         return redirect()->route('tasks.show', $task->id)->with('success_update', 'Status updated successfully');
     }
+
+
+    public function editUpdate(Request $request)
+    {
+        $task = $request->validate([
+            'name' => 'required|max:255',
+            'description' => 'required',
+            'long_description' => 'required',
+        ]);
+
+        $task = Tasks::find($request->id);
+
+        if($task) {
+        $task->name = $request->name;
+        $task->description = $request->description;
+        $task->long_description = $request->long_description;
+        $task->save();
+    }
+
+    return redirect()->route('tasks.show', $task->id)->with('success_edit', 'Task updated successfully');
+    }
 }

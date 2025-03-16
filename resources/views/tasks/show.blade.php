@@ -10,6 +10,11 @@
 
     
     <section>
+      @if(session('success_edit'))
+      <div class="alert alert-success text-center container mt-5">
+          {{ session('success_edit') }}
+        @endif
+        </div>
     <div class="container text-center mt-5">
         <h1 class="text-info">Task {{ $task->name }}</h1>
         <div class="mb-5">
@@ -21,7 +26,7 @@
               <h5 class="card-title">{{ $task->name }}</h5>
               <h6 class="card-subtitle mb-2 text-body-secondary">{{$task->description}}</h6>
               <p class="card-text">{{$task->long_description}}</p>
-              <a href="#modal" class="card-link btn btn-outline-warning">Edit</a>
+              <a href="#modal" class="card-link btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editModal">Edit</a>
               <form action="{{ route('tasks.update', $task->id) }}" method="POST" class="d-inline-block">
                 @csrf
                 @method('PUT')
@@ -32,6 +37,33 @@
             </form>
             </div>
           </div>
+    </div>
+
+    <div id="editModal" class="modal fade" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editModalLabel">Edit Task</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form action="{{ route ('tasks.editUpdate') }}" method="POST">
+            @csrf
+          <div class="modal-body">
+            <input type="hidden" name="id" value="{{ $task->id }}">
+            <label for="name">Task Name</label>
+            <input type="text" name="name" id="name" value="{{ $task->name }}" class="form-control mb-2">
+            <label for="description">Task Description</label>
+            <input type="text" name="description" id="description" value="{{ $task->description }}" class="form-control mb-2">
+            <label for="long_description">Task Long Description</label>
+            <input type="text" name="long_description" id="long_description" value="{{ $task->long_description }}" class="form-control mb-2">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-outline-primary">Save changes</button>
+          </div>
+        </form>
+        </div>
+      </div>
     </div>
     </section>
 
